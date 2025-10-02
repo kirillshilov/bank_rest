@@ -1,0 +1,522 @@
+openapi: 3.0.1
+info:
+  title: bank_rest
+  description: bank_rest
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/
+    description: URL for local test
+paths:
+  /card/operation/transferMoney:
+    post:
+      tags:
+        - card-operation-controller
+      operationId: transferMoney
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UtilResponse'
+      security:
+        - JWT: []
+  /card/operation/blockCardRequest:
+    post:
+      tags:
+        - card-operation-controller
+      operationId: blockCardRequest
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: message
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UtilResponse'
+      security:
+        - JWT: []
+  /card/crud/updateCard:
+    post:
+      tags:
+        - card-crud-controller
+      operationId: updateCard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardSaveResponseDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UtilResponse'
+      security:
+        - JWT: []
+  /card/crud/deleteCard:
+    post:
+      tags:
+        - card-crud-controller
+      operationId: deleteCard
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UtilResponse'
+      security:
+        - JWT: []
+  /card/crud/createCard:
+    post:
+      tags:
+        - card-crud-controller
+      operationId: saveCard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardSaveResponseDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SavedCardId'
+      security:
+        - JWT: []
+  /auth/updateUser:
+    post:
+      tags:
+        - auth-controller
+      operationId: updateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UtilResponse'
+      security:
+        - JWT: []
+  /auth/token:
+    post:
+      tags:
+        - auth-controller
+      operationId: getNewAccessToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshJwtRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+      security:
+        - JWT: []
+  /auth/registerUser:
+    post:
+      tags:
+        - auth-controller
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UtilResponse'
+      security:
+        - JWT: []
+  /auth/refresh:
+    post:
+      tags:
+        - auth-controller
+      operationId: getNewRefreshToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshJwtRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+      security:
+        - JWT: []
+  /auth/login:
+    post:
+      tags:
+        - auth-controller
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JwtRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+      security:
+        - JWT: []
+  /card/operation/getUserCards:
+    get:
+      tags:
+        - card-operation-controller
+      operationId: getUserCards
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageCardDto'
+      security:
+        - JWT: []
+  /card/operation/getBalanceByCardId:
+    get:
+      tags:
+        - card-operation-controller
+      operationId: getBalanceByCardId
+      parameters:
+        - name: cardId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: number
+      security:
+        - JWT: []
+  /card/crud/getCardsByUserLogin:
+    get:
+      tags:
+        - card-crud-controller
+      operationId: getCardsByUserLogin
+      parameters:
+        - name: login
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CardDto'
+      security:
+        - JWT: []
+  /card/crud/getCardById:
+    get:
+      tags:
+        - card-crud-controller
+      operationId: getCardById
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CardDto'
+      security:
+        - JWT: []
+  /card/crud/getAllCards:
+    get:
+      tags:
+        - card-crud-controller
+      operationId: getAllCards
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageCardDto'
+      security:
+        - JWT: []
+components:
+  schemas:
+    TransferDto:
+      required:
+        - amount
+        - fromCardId
+        - toCardId
+      type: object
+      properties:
+        fromCardId:
+          type: integer
+          format: int64
+        toCardId:
+          type: integer
+          format: int64
+        amount:
+          minimum: 0
+          exclusiveMinimum: false
+          type: number
+    UtilResponse:
+      type: object
+      properties:
+        errorCode:
+          type: integer
+          format: int32
+        message:
+          type: string
+    CardSaveResponseDto:
+      required:
+        - balance
+        - expiryDate
+        - number
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        number:
+          pattern: ^[0-9]{16}$
+          type: string
+        owner:
+          type: string
+        expiryDate:
+          type: string
+          format: date
+        cardStatus:
+          type: string
+          enum:
+            - ACTIVE
+            - BLOCKED
+            - EXPIRED
+        balance:
+          minimum: 0
+          exclusiveMinimum: false
+          type: number
+        cardUserId:
+          type: integer
+          format: int64
+    SavedCardId:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        login:
+          type: string
+        password:
+          type: string
+        roles:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            enum:
+              - ADMIN
+              - USER
+    RefreshJwtRequest:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+    JwtResponse:
+      type: object
+      properties:
+        type:
+          type: string
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+    JwtRequest:
+      type: object
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+    CardDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        number:
+          type: string
+        owner:
+          type: string
+        expiryDate:
+          type: string
+          format: date
+        cardStatus:
+          type: string
+          enum:
+            - ACTIVE
+            - BLOCKED
+            - EXPIRED
+        balance:
+          type: number
+    PageCardDto:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardDto'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
